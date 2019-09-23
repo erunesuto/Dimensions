@@ -1,0 +1,4 @@
+Las fisicas mejor en el update()
+los inputs mejor en el fixedUpdate()
+
+en el HUD el orden de los elementos de la hierarchy determina el orden de renderizado
