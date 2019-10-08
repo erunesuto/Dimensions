@@ -1,0 +1,4 @@
+En el personaje la scaleGraity(rigidbody) = 5
+JumpForce = 30
+
+distancia de la camara original(haras journey) = 20
