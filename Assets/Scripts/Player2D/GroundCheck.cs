@@ -13,42 +13,16 @@ public class GroundCheck : MonoBehaviour {
         
     }
 
-    
-    private void OnCollisionEnter2D(Collision2D collision)
+
+    private void OnTriggerEnter2D(Collider2D collision)
     {
         playerController.grounded = true;
-        //Debug.Log("entrando");
     }
 
-    private void OnCollisionStay2D(Collision2D collision)
-     {
-        playerController.grounded = true;
 
-     }
-
-    private void OnCollisionExit2D(Collision2D collision)
+    private void OnTriggerExit2D(Collider2D collision)
     {
         playerController.grounded = false;
-
     }
     
-
-/*
-    private void OnTriggerEnter(Collider collision)
-    {
-        playerController.grounded = true;
-        //Debug.Log("entrando");
-    }
-
-    private void OnTriggerStay(Collider collision)
-    {
-        playerController.grounded = true;
-
-    }
-
-    private void OnTriggerExit(Collider collision)
-    {
-        playerController.grounded = false;
-
-    }*/
 }

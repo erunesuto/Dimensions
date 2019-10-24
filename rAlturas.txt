@@ -1,0 +1,6 @@
+gravedad 5 / 4
+salto normal 4.2 / dinamico 4.9
+
+gravedad 5 / 3.5
+salto normal 4.2 / dinamico 5.6
+

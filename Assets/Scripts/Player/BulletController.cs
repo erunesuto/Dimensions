@@ -4,15 +4,22 @@ using UnityEngine;
 
 public class BulletController : MonoBehaviour
 {
-    // Start is called before the first frame update
+
     public float speed = 50f;
     private Rigidbody2D rb2d;
-    //public GameObject parent;
+    public float lifeTime = 3f;
 
     void Start()
     {
         rb2d = GetComponent<Rigidbody2D>();
-        rb2d.velocity = transform.forward * speed;
-        //rb2d.velocity = transform.right * speed * parent.transform.localScale.x;
+
+        //transform.right makes bullets goes to the side players is facing
+        rb2d.velocity = transform.right * speed;
+
+        //Destroy(gameObject, lifeTime);//destroy gameObject
+        
     }
+
+    
+
 }

@@ -1,4 +1,66 @@
 En el personaje la scaleGraity(rigidbody) = 5
-JumpForce = 30
+JumpSpeed = 30
 
 distancia de la camara original(haras journey) = 20
+distancia de la camara modificada (dimensions) = 8
+
+PlayerController: 08/10/2019
+Primera version:
+Jumpo speed 15
+ground speed 15
+air speed 12
+ground friction 15
+low jump multiplier 3.5
+normal gravity scale 5
+
+camera size 8
+
+
+2 version: (dyanmic jump2)10/10/2019
+Jumpo FOrce 15
+ground speed 15
+air speed 12
+ground friction 15
+low jump multiplier 3.5
+normal gravity scale 10
+jump time 0.35
+
+camera size 10 ?
+
+
+3 version (dyanmic jump1)11/10/2019
+Jumpo FOrce 15
+jump speed 20
+max falling speed -40
+ground speed 15
+air speed 12 
+ground friction 15
+low jump multiplier 3.5
+falling gravity scale 7 
+normal gravity scale 20
+jump time 0.35 /no usado
+
+camera size 8
+
+
+4 version (dyanmic jump1)14/10/2019
+Jumpo FOrce 15
+jump speed 20
+max falling speed -40
+ground speed 15
+air speed 11
+ground friction 15
+low jump multiplier 3.5
+falling gravity scale 7
+normal gravity scale 20
+jump time 0.35 /no usado
+
+camera size 10
+-----------------------------------------
+tamaños:
+player: cubo 200
+tamaño del tile: 150px
+
+
+
+
