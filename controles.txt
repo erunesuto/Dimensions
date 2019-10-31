@@ -1,0 +1,13 @@
+Mando Xbox
+
+movimiento = joystick derecho
+saltar = A (salto dinamico + doble salto)
+disparar = X
+Disparar teledirigido = Y (se controla con el joystic derecho)(al dejar de moverse desaparece)
+
+teclado
+
+movimiento = A y D
+saltar = W (salto dinamico + doble salto)
+disparar = Espacio
+Disparar teledirigido = ctrl derecho (se controla con las flechas)(al dejar de moverse desaparece)

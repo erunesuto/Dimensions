@@ -46,6 +46,7 @@ public class PlayerShoot : MonoBehaviour
             nextFire = Time.time + timeBetweenShots;
             //Instantiate(rcbullet, shotSpawn.position, shotSpawn.rotation);
             objectPooler.spawnFromPool("RCBullet", shotSpawn.position, shotSpawn.rotation);
+          
         }
 
     }

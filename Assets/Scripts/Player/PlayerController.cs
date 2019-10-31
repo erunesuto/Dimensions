@@ -25,7 +25,7 @@ public class PlayerController : MonoBehaviour
     private float jumpTimeCounter;
     public float jumpTime = 0.35f;//time in the air
 
-    private bool doubleJump = true;
+    public bool doubleJump = true;
     public float doubleJumpSpeed = 10f;
 
     //variable dynamic jump v3
