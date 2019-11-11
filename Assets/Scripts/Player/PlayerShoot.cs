@@ -16,23 +16,16 @@ public class PlayerShoot : MonoBehaviour
 
     private ObjectPooler objectPooler;
 
-
-
-    private Vector2 direction;
-    private float angle;
-
     // Start is called before the first frame update
     void Start()
     {
         playerSprite = GetComponentInParent<SpriteRenderer>();
         objectPooler = ObjectPooler.Instance;
-
     }
 
     // Update is called once per frame
     void Update()
     {
-        //shootSpawnRotation();
         repositionShootSpawn();
         shoot();
     }
@@ -61,33 +54,13 @@ public class PlayerShoot : MonoBehaviour
     //controls the position of the shootSpawn to shoot in the correct direction. If the player flips the shootSpawn flips too
     void repositionShootSpawn()
     {
-        float verticalAxisInput = Input.GetAxisRaw("Vertical2");//lo mismo para el raton
-        //ajustar para que cuando el raton este por encima del player dispare para arriba
-        // mousePosition.y - shotSpawn.position.y > shotSpawn.position.y maybe
-
-        var mousePosition = Input.mousePosition;
-        Debug.Log(mousePosition+" //////"+shotSpawn.position.y);
-        if (verticalAxisInput > 0 || mousePosition.y > shotSpawn.position.y)
+        if (playerSprite.flipX == true)
         {
-   
-            shotSpawn.rotation = new Quaternion(shotSpawn.rotation.x, shotSpawn.rotation.y, 45,45);//no se por que es asi pero da 90º
+            shotSpawn.rotation = new Quaternion(shotSpawn.rotation.x, 180, shotSpawn.rotation.x, shotSpawn.rotation.w);
         }
-        else if (playerSprite.flipX == false )
+        else if (playerSprite.flipX == false)
         {
-         
-            shotSpawn.rotation = new Quaternion(shotSpawn.rotation.x, shotSpawn.rotation.y, 0, shotSpawn.rotation.w);
-        }else if (playerSprite.flipX == true  )
-        {
-          
-            shotSpawn.rotation = new Quaternion(shotSpawn.rotation.x, shotSpawn.rotation.y, 180, shotSpawn.rotation.w);
+            shotSpawn.rotation = new Quaternion(shotSpawn.rotation.x, 0, shotSpawn.rotation.x, shotSpawn.rotation.w);
         }
-    }
-
-    void shootSpawnRotation()
-    {
-        direction = Camera.main.ScreenToWorldPoint(Input.mousePosition) - shotSpawn.transform.position;
-        angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-        shotSpawn.rotation = Quaternion.Euler(0f, 0f, angle);
-
     }
 }

@@ -9,7 +9,6 @@ TagManager:
   - EnemyDetections
   - BossActivator
   - Bullet
-  - Scenario
   layers:
   - Default
   - TransparentFX

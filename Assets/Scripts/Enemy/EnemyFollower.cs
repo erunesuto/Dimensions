@@ -5,8 +5,8 @@ using UnityEngine;
 public class EnemyFollower : MonoBehaviour
 {
 
-    public float speed = 3f;
-    public float distanceToPlayer = 5f;
+    public float speed = 5f;
+    public float visionRange = 5f;
     public bool startMoving = false;
     private Transform target;
 
@@ -22,7 +22,7 @@ public class EnemyFollower : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Vector2.Distance(transform.position, target.position) > distanceToPlayer && startMoving == true)
+        if (Vector2.Distance(transform.position, target.position) > visionRange && startMoving == true)
         {
 
             finalPosition = new Vector2(target.position.x, transform.position.y);
