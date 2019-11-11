@@ -11,7 +11,13 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/02Intro.unity
     guid: 9b77afaf8cb022243844b79d03c99c62
+  - enabled: 0
+    path: Assets/Scenes/98IntroSceneTest.unity
+    guid: 7ede55ccf4f87ff45a9ed059bc3415ca
   - enabled: 1
     path: Assets/Scenes/03Scene1.unity
     guid: 2cda990e2423bbf4892e6590ba056729
+  - enabled: 0
+    path: Assets/Scenes/03Scene1Bordes.unity
+    guid: 556e8515ab4f20043a90c212a15b7c5d
   m_configObjects: {}

@@ -48,3 +48,11 @@ MonoBehaviour:
     prefab: {fileID: 8924698849200254149, guid: d402cfcf30ef0a348a1b6fa3239e3d35,
       type: 3}
     size: 15
+  - tag: RCBullet
+    prefab: {fileID: 9180947387932727443, guid: e485ca1012cd4794c85813d4d32cfa1a,
+      type: 3}
+    size: 1
+  - tag: FollowerBullet
+    prefab: {fileID: 7835366310017741100, guid: 818c99486929ff745bce897daa56cfc4,
+      type: 3}
+    size: 1

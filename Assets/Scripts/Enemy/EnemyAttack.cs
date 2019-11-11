@@ -1,6 +1,6 @@
-﻿using UnityEngine;
-using System.Collections;
-
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 
 public class EnemyAttack : MonoBehaviour
 {
@@ -12,7 +12,7 @@ public class EnemyAttack : MonoBehaviour
     //EnemyHealth enemyHealth;                    // Reference to this enemy's health.
     bool playerInRange;                         // Whether player is within the trigger collider and can be attacked.
     float timer;                                // Timer for counting up to the next attack.
-    public bool wantAnimation=true;
+    public bool wantAnimation = true;
 
     void Awake()
     {
@@ -36,7 +36,7 @@ public class EnemyAttack : MonoBehaviour
             {
                 anim.SetBool("Attack", true);//Activates the attack animation
             }
-            
+
         }
     }
 
@@ -52,7 +52,7 @@ public class EnemyAttack : MonoBehaviour
             {
                 anim.SetBool("Attack", false);//Stops the attack animation
             }
-            
+
         }
     }
 
@@ -64,7 +64,7 @@ public class EnemyAttack : MonoBehaviour
         timer += Time.deltaTime;
 
         // If the timer exceeds the time between attacks, the player is in range and this enemy is alive...
-        if (timer >= timeBetweenAttacks && playerInRange /*&& enemyHealth.currentHealth > 0 MODIFICAR AQUI CUANDO EL ENEMIGO TENGA VIDA */) 
+        if (timer >= timeBetweenAttacks && playerInRange /*&& enemyHealth.currentHealth > 0 MODIFICAR AQUI CUANDO EL ENEMIGO TENGA VIDA */)
         {
             // ... attack.
             Attack();
