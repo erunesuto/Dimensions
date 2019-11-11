@@ -20,7 +20,6 @@ public class BulletDestroyer : MonoBehaviour
         if (collision.gameObject.tag == "Bullet")
         {
             collision.gameObject.SetActive(false);
-            Debug.Log("hay colision");
         }
     }
 

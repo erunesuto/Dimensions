@@ -12,16 +12,16 @@ public class EnemyHealth : MonoBehaviour
 
 
     //Animator anim; comentado posible fallo                                              // Reference to the Animator component.
-    AudioSource playerAudio;                                    // Reference to the AudioSource component.                                                                              
+    //AudioSource playerAudio;                                    // Reference to the AudioSource component.                                                                              
     bool isDead;                                                // Whether the player is dead.
     //bool damaged;   comentado posible fallo                                             // True when the player gets damaged.
-    public GameObject deathParticles;
+    //public GameObject deathParticles;
 
     void Awake()
     {
         // Setting up the references.
         //anim = GetComponent<Animator>(); comentado posible fallo
-        playerAudio = GetComponent<AudioSource>();
+        //playerAudio = GetComponent<AudioSource>();
         //playerMovement = GetComponent<PlayerMovement>();
         //playerShooting = GetComponentInChildren<PlayerShooting>();
 
@@ -32,7 +32,7 @@ public class EnemyHealth : MonoBehaviour
 
     void Update()
     {
-       
+
     }
 
 
@@ -44,10 +44,10 @@ public class EnemyHealth : MonoBehaviour
         // Reduce the current health by the damage amount.
         currentHealth -= amount;
         //Instantiate(deathParticles, transform.position, transform.rotation);
-        
+
 
         // Play the hurt sound effect.
-        playerAudio.Play();         //IMPLEMENTAR SONIDO DESPUES
+        //playerAudio.Play();         //IMPLEMENTAR SONIDO DESPUES
 
 
 
@@ -65,7 +65,7 @@ public class EnemyHealth : MonoBehaviour
         // Set the death flag so this function won't be called again.
         isDead = true;
         //Instantiate the deathParticles gameObjecto for the "death animation"
-        Instantiate(deathParticles, transform.position, transform.rotation);
+        //Instantiate(deathParticles, transform.position, transform.rotation);
         Destroy(gameObject);
 
         // Tell the animator that the player is dead.
@@ -73,7 +73,7 @@ public class EnemyHealth : MonoBehaviour
 
         // Set the audiosource to play the death clip and play it (this will stop the hurt sound from playing).
         //playerAudio.clip = deathClip;
-       // playerAudio.Play();
+        // playerAudio.Play();
 
         // Turn off the movement and shooting scripts.
         //playerMovement.enabled = false;

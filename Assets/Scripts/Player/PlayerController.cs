@@ -51,7 +51,6 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
         dynamicJump();
         //dynamicJump2();
        //dynamicJump3();

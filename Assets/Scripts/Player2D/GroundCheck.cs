@@ -16,13 +16,22 @@ public class GroundCheck : MonoBehaviour {
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        playerController.grounded = true;
+        if( collision.gameObject.layer == 9)
+        //if(collision.tag == "Scenario")
+        {
+            playerController.grounded = true;
+        }
+        
     }
 
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        playerController.grounded = false;
+        if (collision.gameObject.layer == 9)
+        //if (collision.tag == "Scenario")
+        {
+            playerController.grounded = false;
+        }
     }
     
 }
