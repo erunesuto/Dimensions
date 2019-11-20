@@ -10,6 +10,7 @@ public class EnemyShoot : MonoBehaviour
 
     public float timeBetweenShots = 0f;
     private float nextFire;
+    public bool canFire = true;//flag
 
     private ObjectPooler objectPooler;
 
@@ -25,6 +26,8 @@ public class EnemyShoot : MonoBehaviour
     {
         repositionShootSpawn();
         nextFire = Time.time + timeBetweenShots;
+
+        //Debug.Log(canFire);
     }
 
 
@@ -54,9 +57,22 @@ public class EnemyShoot : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if(collision.gameObject.tag == "Player")
+        if(collision.gameObject.tag == "Player" && canFire)
         {
+            canFire = false;//flag
             shoot();
         }
     }
+
+
+    private void OnTriggerStay2D(Collider2D collision)
+    {
+        if (collision.gameObject.tag == "Player" && canFire)
+        {
+            canFire = false;//flag
+            shoot();
+            Debug.Log("Trigger stay");
+        }
+    }
+
 }

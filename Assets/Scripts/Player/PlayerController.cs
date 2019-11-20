@@ -2,14 +2,14 @@
 
 public class PlayerController : MonoBehaviour
 {
-
+    private Rigidbody2D rb2d;
+    private Animator anim;
+    private SpriteRenderer spriteRenderer;
 
     public bool grounded;
-    public float jumpForce = 400f;
     public float jumpSpeed = 20f;
-    public float maxFallingSpeed = -20f;//quiza int mejor que float
+    public float maxFallingSpeed = -20f;//maybe int better than float
 
-    // variables Version2
     public float groundSpeed = 20;//groundSpeed
     public float airSpeed = 15;// airspeed
     //public float groundFriction = 15;
@@ -18,24 +18,24 @@ public class PlayerController : MonoBehaviour
     public float jumpGravityScale = 3.5f;//lower than normal gravityScale
     public float fallingGravityScale = 6f; //Gravity while player is falling
     public float normalGravityScale = 5f; //gravity scale in the rigidbody inspector
-    
-
-    //variables dynamic jump v2
-    private bool jumping = false;//if is jumping (ascending)
-    private float jumpTimeCounter;
-    public float jumpTime = 0.35f;//time in the air
 
     public bool doubleJump = true;
     public float doubleJumpSpeed = 10f;
 
+    //variables dynamic jump v2
+    /*private bool jumping = false;//if is jumping (ascending)
+    private float jumpTimeCounter;
+    public float jumpTime = 0.35f;//time in the air
+    */
+
+
+
     //variable dynamic jump v3
-    public bool stoppedJumping;
+    // public bool stoppedJumping;
     //private float jumpTimeCounter;
     //public float jumpTime = 0.35f;
 
-    private Rigidbody2D rb2d;
-    private Animator anim;
-    private SpriteRenderer spriteRenderer;
+    
 
     // Start is called before the first frame update
     void Start()
@@ -125,7 +125,7 @@ public class PlayerController : MonoBehaviour
 
     }
 
-    void jump()
+    /*void jump()
     {
         //Input.GetButtonDown("Jump")
         if (Input.GetButton("Jump"))
@@ -138,8 +138,8 @@ public class PlayerController : MonoBehaviour
             }
         }
     }
-
-    void Jump2()
+    */
+    /*void Jump2()
     {
         if (grounded)
         {
@@ -157,7 +157,7 @@ public class PlayerController : MonoBehaviour
 
         //_velocity.y += Physics2D.gravity.y * Time.deltaTime;
     }
-
+    */
 
     void dynamicJump()
     {
@@ -201,7 +201,7 @@ public class PlayerController : MonoBehaviour
     }
 
 
-    void dynamicJump2()
+    /*void dynamicJump2()
     {
         if (Input.GetButtonDown("Jump") && grounded == true)
         //if (Input.GetButton("Jump"))
@@ -230,9 +230,9 @@ public class PlayerController : MonoBehaviour
             jumping = false;
         }
     }
+    */
 
-
-    void dynamicJump3()
+   /* void dynamicJump3()
     {
         if (grounded)
         {
@@ -266,7 +266,7 @@ public class PlayerController : MonoBehaviour
             stoppedJumping = true;
         }
     }
-
+    */
     void debugLogs()
     {
         //Debug.Log("Y position " + rb2d.position.y);

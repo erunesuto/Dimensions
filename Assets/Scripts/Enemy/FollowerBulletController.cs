@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class FollowerBulletController : MonoBehaviour
 {
-
+    //Bullet of red enemy.
     public float moveSpeed = 10f;
     private Transform player;
     private float startTime;
@@ -12,12 +12,14 @@ public class FollowerBulletController : MonoBehaviour
 
     public int attackDamage = 1;
     PlayerHealth playerHealth;
+    private EnemyShoot enemyShoot;
 
     // Start is called before the first frame update
     void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
         playerHealth = player.GetComponent<PlayerHealth>();
+        
     }
 
     // Update is called once per frame
@@ -46,7 +48,7 @@ public class FollowerBulletController : MonoBehaviour
                 other.gameObject.GetComponentInParent<PlayerHealth>().TakeDamage(attackDamage);
                 this.gameObject.SetActive(false);
             }
-           
+
         }
 
         //desactivate the bullet
@@ -55,5 +57,7 @@ public class FollowerBulletController : MonoBehaviour
             //this.gameObject.SetActive(false);
             this.transform.root.gameObject.SetActive(false);//the very most top parent of the tree
         }
+
     }
+
 }

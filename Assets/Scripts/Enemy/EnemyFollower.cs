@@ -27,8 +27,8 @@ public class EnemyFollower : MonoBehaviour
 
             finalPosition = new Vector2(target.position.x, transform.position.y);
 
-            //                                       enemy position,     player position with position.y locked at enemy position.y
-            transform.position = Vector2.MoveTowards(transform.position, new Vector2( target.position.x, transform.position.y) , speed * Time.deltaTime);
+            //   root = very most top parent              enemy position,     player position with position.y locked at enemy position.y
+            transform.root.position = Vector2.MoveTowards(transform.position, new Vector2( target.position.x, transform.position.y) , speed * Time.deltaTime);
 
           
         }

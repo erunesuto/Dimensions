@@ -17,9 +17,15 @@ public class PlayerShoot : MonoBehaviour
     private ObjectPooler objectPooler;
 
 
-
+    //shotspawn dierection
     private Vector2 direction;
     private float angle;
+
+    //shotspawn direction2
+    public float offset = 180;
+
+    public GameObject crosshair;
+    public float crosshairDistanceMultiplier = 2;
 
     // Start is called before the first frame update
     void Start()
@@ -27,30 +33,49 @@ public class PlayerShoot : MonoBehaviour
         playerSprite = GetComponentInParent<SpriteRenderer>();
         objectPooler = ObjectPooler.Instance;
 
+
+        //player = GameObject.FindGameObjectWithTag("Player"); //find the player
     }
 
     // Update is called once per frame
     void Update()
     {
-        //shootSpawnRotation();
-        repositionShootSpawn();
+
+        if(OtherSettings.xboxController)
+        {
+            shootSpawnRotationJoystick();
+        }
+        else
+        {
+            shootSpawnRotationMouse();
+            
+            
+        }
+
         shoot();
     }
 
     void shoot()
     {
+
+        var horizontalAxis = Input.GetAxisRaw("Horizontal2");
+        var verticalAxis = Input.GetAxisRaw("Vertical2");
+
         if (Input.GetButton("Fire") && Time.time > nextFire)
         {
             nextFire = Time.time + timeBetweenShots;
             //Instantiate(bullet, shotSpawn.position, shotSpawn.rotation);
 
             //objectPooler.spawnFromPool("Bullet", shotSpawn.position, Quaternion.identity);//no se que es el quaternion identity :/
-            objectPooler.spawnFromPool("Bullet", shotSpawn.position, shotSpawn.rotation);
+            objectPooler.spawnFromPool("Bullet", shotSpawn.position, shotSpawn.rotation);//shotSpawn.rotation is the rotation of the bullet(same at the shotSpawn)
+            //objectPooler.spawnFromPool("Bullet", crosshair.transform.position, shotSpawn.rotation);
         }
+
 
         if (Input.GetButton("FireRC") && Time.time > nextFire)
         {
             nextFire = Time.time + timeBetweenShots;
+            repositionFlipShootSpawn();
             //Instantiate(rcbullet, shotSpawn.position, shotSpawn.rotation);
             objectPooler.spawnFromPool("RCBullet", shotSpawn.position, shotSpawn.rotation);
           
@@ -59,35 +84,70 @@ public class PlayerShoot : MonoBehaviour
     }
 
     //controls the position of the shootSpawn to shoot in the correct direction. If the player flips the shootSpawn flips too
-    void repositionShootSpawn()
+    void repositionFlipShootSpawn()
     {
-        float verticalAxisInput = Input.GetAxisRaw("Vertical2");//lo mismo para el raton
-        //ajustar para que cuando el raton este por encima del player dispare para arriba
-        // mousePosition.y - shotSpawn.position.y > shotSpawn.position.y maybe
-
-        var mousePosition = Input.mousePosition;
-        Debug.Log(mousePosition+" //////"+shotSpawn.position.y);
-        if (verticalAxisInput > 0 || mousePosition.y > shotSpawn.position.y)
-        {
-   
-            shotSpawn.rotation = new Quaternion(shotSpawn.rotation.x, shotSpawn.rotation.y, 45,45);//no se por que es asi pero da 90º
-        }
-        else if (playerSprite.flipX == false )
+       
+        if (playerSprite.flipX == false )
         {
          
             shotSpawn.rotation = new Quaternion(shotSpawn.rotation.x, shotSpawn.rotation.y, 0, shotSpawn.rotation.w);
         }else if (playerSprite.flipX == true  )
         {
           
-            shotSpawn.rotation = new Quaternion(shotSpawn.rotation.x, shotSpawn.rotation.y, 180, shotSpawn.rotation.w);
+            shotSpawn.rotation = new Quaternion(shotSpawn.rotation.x, 180, 0, shotSpawn.rotation.w);
         }
     }
 
-    void shootSpawnRotation()
+
+    //360 degrees rotation with mouse
+    void shootSpawnRotationMouse()
     {
-        direction = Camera.main.ScreenToWorldPoint(Input.mousePosition) - shotSpawn.transform.position;
-        angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-        shotSpawn.rotation = Quaternion.Euler(0f, 0f, angle);
+        //Mouse has just 2D, you have to set the z position because the ScreenToWorldPoint uses vector3
+        var mousePos = Input.mousePosition;
+        mousePos.z = -10;
+
+        //Vector3 difference = Camera.main.ScreenToWorldPoint(mousePos) - shotSpawn.transform.position;
+        Vector3 difference = Camera.main.ScreenToWorldPoint(mousePos) - Camera.main.transform.position;
+        float rotZ = Mathf.Atan2(difference.y, difference.x) * Mathf.Rad2Deg;
+        shotSpawn.transform.rotation = Quaternion.Euler(0f, 0f, rotZ + offset);
+  
+    }
+
+    
+    //joystick
+    void shootSpawnRotationJoystick()
+    {
+        var horizontalAxis = Input.GetAxisRaw("Horizontal2");
+        var verticalAxis = Input.GetAxisRaw("Vertical2");
+        var crosshairXPos = 2;
+        var crosshairYPos = 2;
+
+        var movementDirection = new Vector2(horizontalAxis, verticalAxis);
+        crosshair.transform.localPosition = movementDirection * crosshairDistanceMultiplier;
+
+        if (crosshair.transform.localPosition.x > 2)
+        {
+            crosshair.transform.localPosition = new Vector2(crosshairXPos, crosshair.transform.localPosition.y);
+        }else if (crosshair.transform.localPosition.x < -2)
+        {
+            crosshair.transform.localPosition = new Vector2(-crosshairXPos, crosshair.transform.localPosition.y);
+        }
+
+
+        if (crosshair.transform.localPosition.y > 2)
+        {
+            crosshair.transform.localPosition = new Vector2(crosshair.transform.localPosition.x, crosshairYPos);
+        }else if (crosshair.transform.localPosition.y < -2)
+        {
+            crosshair.transform.localPosition = new Vector2(crosshair.transform.localPosition.x, -crosshairYPos);
+        }
+        
+
+        Vector3 difference = crosshair.transform.position - shotSpawn.transform.position;// a lo mejor cambiar la camara por el player
+        float rotZ = Mathf.Atan2(difference.y, difference.x) * Mathf.Rad2Deg;
+        shotSpawn.transform.rotation = Quaternion.Euler(0f, 0f, rotZ);
 
     }
+
+   
 }

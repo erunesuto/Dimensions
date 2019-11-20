@@ -15,22 +15,21 @@ public class RCBulletController : MonoBehaviour
     private bool mouseClick; //flag
 
     private ObjectPooler objectPooler;
+    private GameObject camera;
 
     // Start is called before the first frame update
     void Start()
     {
         this.gameObject.SetActive(true);
         rb2d = GetComponent<Rigidbody2D>();
-        rb2d.gravityScale = 1;
+        //rb2d.gravityScale = 1;
+        camera = GameObject.FindGameObjectWithTag("MainCamera"); //find the camera
     }
 
     // Update is called once per frame
     void Update()
     {
-
         movement();
-
-        
 
     }
 
@@ -57,16 +56,16 @@ public class RCBulletController : MonoBehaviour
                 canDestroyBullet = false;//flag
             }
 
-            //////////////////////
             if (Input.GetMouseButton(1))
             {
                 mouseClick = true;//flag
             }
             if (mouseClick)
             {
-                Vector3 mouse = Input.mousePosition;
-                mouse.z = 20f; // Set this to be the distance you want the object to be placed in front of the camera.
-                               //this.transform.position = Camera.main.ScreenToWorldPoint(mouse);
+                Vector3 mouse = Input.mousePosition;                 
+
+                mouse.z = -camera.transform.position.z;// Set this to be the distance you want the object to be placed in front of the camera.
+
                 transform.position = Vector2.MoveTowards(transform.position, Camera.main.ScreenToWorldPoint(mouse), speed * Time.deltaTime);
 
                 if (transform.position == Camera.main.ScreenToWorldPoint(mouse))
@@ -76,7 +75,6 @@ public class RCBulletController : MonoBehaviour
                 }
             }
 
-            //////////////////////////////
 
         }
 
