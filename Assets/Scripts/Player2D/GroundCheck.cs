@@ -14,6 +14,8 @@ public class GroundCheck : MonoBehaviour {
     }
 
 
+
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if( collision.gameObject.layer == 9)
@@ -21,7 +23,7 @@ public class GroundCheck : MonoBehaviour {
         {
             playerController.grounded = true;
         }
-        
+
     }
 
 
@@ -33,5 +35,5 @@ public class GroundCheck : MonoBehaviour {
             playerController.grounded = false;
         }
     }
-    
+
 }

@@ -8,11 +8,13 @@ public class EnemyShoot : MonoBehaviour
     private SpriteRenderer enemySprite;
     public Transform shotSpawn;
 
-    public float timeBetweenShots = 0f;
+    public float timeBetweenShots = 3f;
     private float nextFire;
-    public bool canFire = true;//flag
+    public bool canFire = false;//flag
 
     private ObjectPooler objectPooler;
+
+
 
     // Start is called before the first frame update
     void Start()
@@ -23,24 +25,23 @@ public class EnemyShoot : MonoBehaviour
 
     // Update is called once per frame
     void Update()
-    {
+    {        
         repositionShootSpawn();
-        nextFire = Time.time + timeBetweenShots;
-
-        //Debug.Log(canFire);
+        shoot();
     }
 
 
     void shoot()
     {
-       
-        //nextFire = Time.time + timeBetweenShots;
-        //Instantiate(bullet, shotSpawn.position, shotSpawn.rotation);
-
+  
         //objectPooler.spawnFromPool("Bullet", shotSpawn.position, Quaternion.identity);//no se que es el quaternion identity :/
-        objectPooler.spawnFromPool("FollowerBullet", shotSpawn.position, shotSpawn.rotation);
+        //objectPooler.spawnFromPool("FollowerBullet", shotSpawn.position, shotSpawn.rotation);
 
-
+        if (canFire && Time.time > nextFire)
+        {
+            nextFire = Time.time + timeBetweenShots;
+            objectPooler.spawnFromPool("FollowerBullet", shotSpawn.position, shotSpawn.rotation);
+        }
     }
 
     void repositionShootSpawn()
@@ -57,22 +58,36 @@ public class EnemyShoot : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if(collision.gameObject.tag == "Player" && canFire)
+        if (collision.gameObject.tag == "Player")
         {
-            canFire = false;//flag
-            shoot();
+            canFire = true;
+        }
+
+        
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.gameObject.tag == "Player")
+        {
+            canFire = false;
+            
         }
     }
 
-
-    private void OnTriggerStay2D(Collider2D collision)
+    /*private void OnTriggerStay2D(Collider2D collision)
     {
-        if (collision.gameObject.tag == "Player" && canFire)
+        if (collision.gameObject.tag == "Player")
         {
-            canFire = false;//flag
-            shoot();
             Debug.Log("Trigger stay");
         }
-    }
+        
+        if (collision.gameObject.tag == "Player" && Time.time > nextFire)
+        {
+            nextFire = Time.time + timeBetweenShots;
+            //shoot();
+            Debug.Log("Shoot stay");
+        }
+    }*/
 
 }

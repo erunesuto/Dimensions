@@ -19,16 +19,21 @@ public class OtherSettings : MonoBehaviour
 
     void joystickConnected()
     {
-        if (Input.GetJoystickNames()[0].Length == 33)
+        //check if there is any controller conected
+        if (Input.GetJoystickNames().Length > 0)
         {
-            xboxController = true;
+            if (Input.GetJoystickNames()[0].Length == 33)
+            {
+                xboxController = true;
+            }
+            else
+            {
+                xboxController = false;
+            }
+            //autoinvoke after 3 second to optimize the performance, instead of every frame in Update()
+            Invoke("joystickConnected", 3);
         }
-        else
-        {
-            xboxController = false;
-        }
-        //autoinvoke after 3 second to optimize the performance
-        Invoke("joystickConnected", 3);
+        
     }
 
 }

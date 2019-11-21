@@ -5,7 +5,7 @@ using UnityEngine;
 public class FollowerBulletController : MonoBehaviour
 {
     //Bullet of red enemy.
-    public float moveSpeed = 10f;
+    public float moveSpeed = 15f;
     private Transform player;
     private float startTime;
     public float lifeTime;
@@ -25,14 +25,10 @@ public class FollowerBulletController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
-        transform.position = Vector2.MoveTowards(transform.position, Camera.main.ScreenToWorldPoint(player.position), moveSpeed * Time.deltaTime);
 
-        /*if (transform.position == Camera.main.ScreenToWorldPoint(mouse))
-        {
-            Destroy(gameObject);
-        }*/
-        
+        //transform.position = Vector2.MoveTowards(transform.position, Camera.main.ScreenToWorldPoint(player.position), moveSpeed * Time.deltaTime);//smoother
+        transform.position = Vector2.MoveTowards(transform.position, player.position, moveSpeed * Time.deltaTime);
+
     }
 
     void OnTriggerEnter2D(Collider2D other)
