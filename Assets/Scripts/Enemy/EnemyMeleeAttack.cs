@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyAttack : MonoBehaviour
+public class EnemyMeleeAttack : MonoBehaviour
 {
     public float timeBetweenAttacks = 0.5f;     // The time in seconds between each attack.
     public int attackDamage = 10;               // The amount of health taken away per attack.
@@ -14,6 +14,7 @@ public class EnemyAttack : MonoBehaviour
     float timer;                                // Timer for counting up to the next attack.
     public bool wantAnimation = true;
 
+
     void Awake()
     {
         // Setting up the references.
@@ -24,11 +25,37 @@ public class EnemyAttack : MonoBehaviour
     }
 
 
+    
+
+
+    void Update()
+    {
+        // Add the time since Update was last called to the timer.
+        // If timer value is higher than timeBetweenAttack enemy attacks.
+        timer += Time.deltaTime;
+
+        // If the timer exceeds the time between attacks, the player is in range and this enemy is alive...
+        if (timer >= timeBetweenAttacks && playerInRange /*&& enemyHealth.currentHealth > 0 MODIFICAR AQUI CUANDO EL ENEMIGO TENGA VIDA */)
+        {
+            // ... attack.
+            Attack();
+        }
+
+        // If the player has zero or less health...
+        if (playerHealth.currentHealth <= 0)
+        {
+            // ... tell the animator the player is dead.
+            //anim.SetTrigger("PlayerDead");               CUANDO HAYA ANIMCION DE MUERTE DEL PLAYER
+        }
+    }
+
+
     void OnTriggerEnter2D(Collider2D other)
     {
         // If the entering collider is the player...
         if (other.gameObject == player)
         {
+
             // ... the player is in range.
             playerInRange = true;
 
@@ -57,28 +84,6 @@ public class EnemyAttack : MonoBehaviour
     }
 
 
-    void Update()
-    {
-        // Add the time since Update was last called to the timer.
-        // If timer value is higher than timeBetweenAttack enemy attacks.
-        timer += Time.deltaTime;
-
-        // If the timer exceeds the time between attacks, the player is in range and this enemy is alive...
-        if (timer >= timeBetweenAttacks && playerInRange /*&& enemyHealth.currentHealth > 0 MODIFICAR AQUI CUANDO EL ENEMIGO TENGA VIDA */)
-        {
-            // ... attack.
-            Attack();
-        }
-
-        // If the player has zero or less health...
-        if (playerHealth.currentHealth <= 0)
-        {
-            // ... tell the animator the player is dead.
-            //anim.SetTrigger("PlayerDead");               CUANDO HAYA ANIMCION DE MUERTE DEL PLAYER
-        }
-    }
-
-
     void Attack()
     {
         // Reset the timer.
@@ -91,4 +96,7 @@ public class EnemyAttack : MonoBehaviour
             playerHealth.TakeDamage(attackDamage);
         }
     }
+
+
+
 }

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyShoot : MonoBehaviour
+public class BasicEnemyShoot : MonoBehaviour
 {
 
     private SpriteRenderer enemySprite;
@@ -30,15 +30,15 @@ public class EnemyShoot : MonoBehaviour
     void Update()
     {
 
-        shootSpawnRotation();
-        //repositionShootSpawn();
+        //shootSpawnRotation();
+        repositionShootSpawn();
         shoot();
     }
 
 
     void shoot()
     {
-  
+
         //objectPooler.spawnFromPool("Bullet", shotSpawn.position, Quaternion.identity);//no se que es el quaternion identity :/
         //objectPooler.spawnFromPool("FollowerBullet", shotSpawn.position, shotSpawn.rotation);
 
@@ -49,6 +49,7 @@ public class EnemyShoot : MonoBehaviour
         }
     }
 
+    //this is the difference with EnemyShoot
     void repositionShootSpawn()
     {
         if (enemySprite.flipX == true)
@@ -61,19 +62,6 @@ public class EnemyShoot : MonoBehaviour
         }
     }
 
-
-    void shootSpawnRotation()
-    {
-
-
-        //Vector3 difference = Camera.main.ScreenToWorldPoint(mousePos) - shotSpawn.transform.position;
-        Vector3 difference = transform.position - player.position;
-        float rotZ = Mathf.Atan2(difference.y, difference.x) * Mathf.Rad2Deg;
-        shotSpawn.transform.rotation = Quaternion.Euler(0f, 0f, rotZ + 180);//180 is an offset
-
-    }
-
-
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.tag == "Player")
@@ -81,7 +69,7 @@ public class EnemyShoot : MonoBehaviour
             canFire = true;
         }
 
-        
+
     }
 
     private void OnTriggerExit2D(Collider2D collision)
@@ -89,7 +77,7 @@ public class EnemyShoot : MonoBehaviour
         if (collision.gameObject.tag == "Player")
         {
             canFire = false;
-            
+
         }
     }
 

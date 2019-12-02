@@ -8,11 +8,15 @@ public class FollowerBulletController : MonoBehaviour
     public float moveSpeed = 15f;
     private Transform player;
     private float startTime;
-    public float lifeTime;
+    public float lifeTime = 1;
+    private float lifeTimeStarts;//when the bullet spawn
+    private bool destroyBullet = true;
 
     public int attackDamage = 1;
     PlayerHealth playerHealth;
     private EnemyShoot enemyShoot;
+
+    
 
     // Start is called before the first frame update
     void Start()
@@ -29,6 +33,7 @@ public class FollowerBulletController : MonoBehaviour
         //transform.position = Vector2.MoveTowards(transform.position, Camera.main.ScreenToWorldPoint(player.position), moveSpeed * Time.deltaTime);//smoother
         transform.position = Vector2.MoveTowards(transform.position, player.position, moveSpeed * Time.deltaTime);
 
+        destroy();
     }
 
     void OnTriggerEnter2D(Collider2D other)
@@ -56,4 +61,19 @@ public class FollowerBulletController : MonoBehaviour
 
     }
 
+
+    private void destroy()
+    {
+        if (destroyBullet)
+        {
+            destroyBullet = false;
+            lifeTimeStarts = Time.fixedTime;
+        }
+
+        if(Time.fixedTime >= lifeTimeStarts + lifeTime)
+        {
+            destroyBullet = true;
+            gameObject.SetActive(false);
+        }
+    }
 }

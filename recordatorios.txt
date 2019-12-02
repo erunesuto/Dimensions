@@ -62,5 +62,12 @@ player: cubo 200
 tamaño del tile: 150px
 
 
+---------------------------------------
+
+SenoidalBUllet
+SPeed 5
+amplitude 20
+frecuency 4
+
 
 
