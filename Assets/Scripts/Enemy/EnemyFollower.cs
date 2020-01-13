@@ -29,8 +29,16 @@ public class EnemyFollower : MonoBehaviour
     public float jumpSpeed = 10;
 
     LayerMask scenarioLayer;
-    LayerMask playerLayer;
+    //LayerMask playerLayer;
+    // LayerMask allLayers = Physics2D.AllLayers;//test
 
+    public float timeFollowingAfterLoseVision;//time we want enemy still following after lose vision of player
+    private float timeVisionIsLost;
+    private bool playerVision = true;
+
+
+    private bool visionLost = true;
+    private bool canResetTimeVisionLost = true;
 
     void Start()
     {
@@ -39,17 +47,17 @@ public class EnemyFollower : MonoBehaviour
         rb2d = GetComponentInParent<Rigidbody2D>();
 
         scenarioLayer = LayerMask.GetMask("Scenario");
-        playerLayer = LayerMask.GetMask("Player");
+        //playerLayer = LayerMask.GetMask("Player");
     }
 
     // Update is called once per frame
     void Update()
     {
-
+        checkingScenarioCollisions();
         movement();
         flipSPrite();
 
-        checkingScenarioCollisions();
+        
 
     }
 
@@ -102,30 +110,55 @@ public class EnemyFollower : MonoBehaviour
         //Debug.DrawRay(lowerPosition, Vector2.right * rayLenght);//lower right
         //Debug.DrawRay(lowerPosition, Vector2.left * rayLenght);//lower left
 
-        //////////////////////////////////////////
-        Ray2D ray = new Ray2D(lowerPosition, Vector2.right);
-        RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction, 20f);
 
-        if (hit.collider != null /*&&  hit.collider.tag == "Scenario"*/)
-        {
-            Debug.Log(hit.collider.tag);
-            Debug.DrawLine(ray.origin, hit.point);
-            Debug.DrawRay(ray.origin, Vector2.right * 2); aqui
-        }
+        ////////////////////////////////////
 
-        /*if (hit.collider != null && hit.collider.tag == "Player")
-        {
-            Debug.Log("player");
-            //Debug.DrawLine(ray.origin, hit.point);
+
+        /* if (Physics2D.Linecast(transform.position, player.position, scenarioLayer) && playerVision)//no vision
+         {
+             timeVisionIsLost = Time.fixedTime;
+             playerVision = false;
+             visionLost = true;
+
+         }
+
+         if (visionLost && Time.fixedTime > timeVisionIsLost + timeFollowingAfterLoseVision)//esto debe ir dentro de lineCast
+         {
+             canMove = false;
+             playerVision = true;
+             visionLost = false;
+         }
+         else
+         {
+             canMove = true;
+
+
+         }*/
+
+        /*if (Physics2D.Linecast(transform.position, player.position, scenarioLayer)){
+            canMove = false;
         }*/
-        ////////////////////////////
 
-
-        //Debug.DrawRay(lowerPosition, Vector2.right * rayLenght * 4);
-        if (Physics2D.Raycast(lowerPosition, Vector2.right, rayLenght * 4, playerLayer))//raycast to the player
+        //aqui
+        //solo se activa si el fixedTime es menos que la suma de timepos(3 segundo)
+        //Optimizar esto, es repetitivo
+        if ((!Physics2D.Linecast(transform.position, player.position, scenarioLayer) && Time.fixedTime < (timeVisionIsLost + timeFollowingAfterLoseVision) /*&& !visionLost*/) 
+            || Physics2D.Linecast(transform.position, player.position, scenarioLayer) && Time.fixedTime < (timeVisionIsLost + timeFollowingAfterLoseVision))
         {
-            //Debug.Log("tocandoplayer"); //tocar por aqui
+            canMove = true;
+            
+        }else if (Physics2D.Linecast(transform.position, player.position, scenarioLayer) && Time.fixedTime > (timeVisionIsLost + timeFollowingAfterLoseVision) /*&& !visionLost*/)
+        {
+            canMove = false;
+            visionLost = true;
+
+            //canResetTimeVisionLost = true;// ha perdidio la vision, la proxima vez que lo vea y lo pierda de vista reinicia el timeVIsionLost
         }
+
+        
+        Debug.DrawLine(transform.position, player.position);
+        Debug.Log("fixeTime "+Time.fixedTime + " timeVisionLost " + timeVisionIsLost +" timeFollowing " + timeFollowingAfterLoseVision + " suma "+ (timeVisionIsLost + timeFollowingAfterLoseVision) + " canResetTimeVisionLost: " + canResetTimeVisionLost);
+
 
         //if the wall is too high enemy cannot jump.2 raycast from the top(head) of the enemy to left and right to detects high walls. Upperright and upper left
         if (Physics2D.Raycast(upperPosition, Vector2.right, rayLenght, scenarioLayer) || Physics2D.Raycast(upperPosition, Vector2.left, rayLenght, scenarioLayer))
@@ -149,10 +182,53 @@ public class EnemyFollower : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.tag == "Player")
+        if (collision.tag == "Player" && !Physics2D.Linecast(transform.position, player.position, scenarioLayer))
         {
             canMove = true;
         }
+
+    }
+
+    private void OnTriggerStay2D(Collider2D collision)
+    {
+        /////////////
+        ///hay que pulir y limpiar algunas cosas
+        aqui
+        if (collision.tag == "Player" && !Physics2D.Linecast(transform.position, player.position, scenarioLayer))
+        {
+            canResetTimeVisionLost = true;
+        }
+
+        if (collision.tag == "Player" && canResetTimeVisionLost && Physics2D.Linecast(transform.position, player.position, scenarioLayer))
+        {
+            timeVisionIsLost = Time.fixedTime;
+            canResetTimeVisionLost = false;
+        }
+
+        if(collision.tag == "Player" && canResetTimeVisionLost && !Physics2D.Linecast(transform.position, player.position, scenarioLayer))
+        {
+            canMove = true;
+
+        }
+
+            //////////////////////
+
+        /*if (collision.tag == "Player" && Physics2D.Linecast(transform.position, player.position, scenarioLayer) && visionLost)
+        {
+            timeVisionIsLost = Time.fixedTime;
+        }*/
+
+
+        //este Physics2D.Linecast(transform.position, player.position, scenarioLayer) es redundante, se hace arriba
+        /*if (collision.tag == "Player" && !Physics2D.Linecast(transform.position, player.position, scenarioLayer) && visionLost)
+        {
+ 
+            //timeVisionIsLost = Time.fixedTime; //aqui
+
+            visionLost = false;
+        }*/
+
+      
 
     }
 
