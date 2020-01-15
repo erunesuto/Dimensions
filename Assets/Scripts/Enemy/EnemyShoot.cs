@@ -17,6 +17,8 @@ public class EnemyShoot : MonoBehaviour
     public string bullet;
     private Transform player;
 
+    LayerMask scenarioLayer;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -24,6 +26,8 @@ public class EnemyShoot : MonoBehaviour
         objectPooler = ObjectPooler.Instance;
 
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
+
+        scenarioLayer = LayerMask.GetMask("Scenario");
     }
 
     // Update is called once per frame
@@ -76,12 +80,31 @@ public class EnemyShoot : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.tag == "Player")
+        if (collision.gameObject.tag == "Player" && !Physics2D.Linecast(transform.position, player.position, scenarioLayer))
         {
             canFire = true;
         }
 
         
+    }
+
+    private void OnTriggerStay2D(Collider2D collision)
+    {
+
+        if (collision.gameObject.tag == "Player")
+        {
+            if (!Physics2D.Linecast(transform.position, player.position, scenarioLayer))
+            {
+                canFire = true;
+            }
+
+            if (Physics2D.Linecast(transform.position, player.position, scenarioLayer))
+            {
+                canFire = false;
+            }
+        }
+
+
     }
 
     private void OnTriggerExit2D(Collider2D collision)

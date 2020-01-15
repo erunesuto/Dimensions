@@ -37,8 +37,8 @@ public class EnemyFollower : MonoBehaviour
     private bool playerVision = true;
 
 
-    private bool visionLost = true;
-    private bool canResetTimeVisionLost = true;
+    
+    private bool canResetTimeVisionLost = false;
 
     void Start()
     {
@@ -48,6 +48,9 @@ public class EnemyFollower : MonoBehaviour
 
         scenarioLayer = LayerMask.GetMask("Scenario");
         //playerLayer = LayerMask.GetMask("Player");
+
+
+        timeVisionIsLost = -2;
     }
 
     // Update is called once per frame
@@ -56,8 +59,6 @@ public class EnemyFollower : MonoBehaviour
         checkingScenarioCollisions();
         movement();
         flipSPrite();
-
-        
 
     }
 
@@ -111,53 +112,24 @@ public class EnemyFollower : MonoBehaviour
         //Debug.DrawRay(lowerPosition, Vector2.left * rayLenght);//lower left
 
 
-        ////////////////////////////////////
-
-
-        /* if (Physics2D.Linecast(transform.position, player.position, scenarioLayer) && playerVision)//no vision
-         {
-             timeVisionIsLost = Time.fixedTime;
-             playerVision = false;
-             visionLost = true;
-
-         }
-
-         if (visionLost && Time.fixedTime > timeVisionIsLost + timeFollowingAfterLoseVision)//esto debe ir dentro de lineCast
-         {
-             canMove = false;
-             playerVision = true;
-             visionLost = false;
-         }
-         else
-         {
-             canMove = true;
-
-
-         }*/
-
-        /*if (Physics2D.Linecast(transform.position, player.position, scenarioLayer)){
-            canMove = false;
-        }*/
-
-        //aqui
         //solo se activa si el fixedTime es menos que la suma de timepos(3 segundo)
         //Optimizar esto, es repetitivo
-        if ((!Physics2D.Linecast(transform.position, player.position, scenarioLayer) && Time.fixedTime < (timeVisionIsLost + timeFollowingAfterLoseVision) /*&& !visionLost*/) 
-            || Physics2D.Linecast(transform.position, player.position, scenarioLayer) && Time.fixedTime < (timeVisionIsLost + timeFollowingAfterLoseVision))
+        if ((!Physics2D.Linecast(transform.position, player.position, scenarioLayer) && Time.fixedTime < (timeVisionIsLost + timeFollowingAfterLoseVision))
+            || (Physics2D.Linecast(transform.position, player.position, scenarioLayer) && Time.fixedTime < (timeVisionIsLost + timeFollowingAfterLoseVision)))
         {
             canMove = true;
             
         }else if (Physics2D.Linecast(transform.position, player.position, scenarioLayer) && Time.fixedTime > (timeVisionIsLost + timeFollowingAfterLoseVision) /*&& !visionLost*/)
         {
             canMove = false;
-            visionLost = true;
+           
 
             //canResetTimeVisionLost = true;// ha perdidio la vision, la proxima vez que lo vea y lo pierda de vista reinicia el timeVIsionLost
         }
 
         
-        Debug.DrawLine(transform.position, player.position);
-        Debug.Log("fixeTime "+Time.fixedTime + " timeVisionLost " + timeVisionIsLost +" timeFollowing " + timeFollowingAfterLoseVision + " suma "+ (timeVisionIsLost + timeFollowingAfterLoseVision) + " canResetTimeVisionLost: " + canResetTimeVisionLost);
+        //Debug.DrawLine(transform.position, player.position);
+        //Debug.Log("fixeTime "+Time.fixedTime + " timeVisionLost " + timeVisionIsLost +" timeFollowing " + timeFollowingAfterLoseVision + " suma "+ (timeVisionIsLost + timeFollowingAfterLoseVision) + " canResetTimeVisionLost: " + canResetTimeVisionLost);
 
 
         //if the wall is too high enemy cannot jump.2 raycast from the top(head) of the enemy to left and right to detects high walls. Upperright and upper left
@@ -193,7 +165,7 @@ public class EnemyFollower : MonoBehaviour
     {
         /////////////
         ///hay que pulir y limpiar algunas cosas
-        aqui
+        
         if (collision.tag == "Player" && !Physics2D.Linecast(transform.position, player.position, scenarioLayer))
         {
             canResetTimeVisionLost = true;
@@ -210,25 +182,6 @@ public class EnemyFollower : MonoBehaviour
             canMove = true;
 
         }
-
-            //////////////////////
-
-        /*if (collision.tag == "Player" && Physics2D.Linecast(transform.position, player.position, scenarioLayer) && visionLost)
-        {
-            timeVisionIsLost = Time.fixedTime;
-        }*/
-
-
-        //este Physics2D.Linecast(transform.position, player.position, scenarioLayer) es redundante, se hace arriba
-        /*if (collision.tag == "Player" && !Physics2D.Linecast(transform.position, player.position, scenarioLayer) && visionLost)
-        {
- 
-            //timeVisionIsLost = Time.fixedTime; //aqui
-
-            visionLost = false;
-        }*/
-
-      
 
     }
 

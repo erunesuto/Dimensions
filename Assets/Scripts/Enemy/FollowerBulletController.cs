@@ -33,7 +33,7 @@ public class FollowerBulletController : MonoBehaviour
         //transform.position = Vector2.MoveTowards(transform.position, Camera.main.ScreenToWorldPoint(player.position), moveSpeed * Time.deltaTime);//smoother
         transform.position = Vector2.MoveTowards(transform.position, player.position, moveSpeed * Time.deltaTime);
 
-        destroy();
+        //destroy();
     }
 
     void OnTriggerEnter2D(Collider2D other)
@@ -62,6 +62,7 @@ public class FollowerBulletController : MonoBehaviour
     }
 
 
+    //revisar para que se destruya pasado un tiempo o simplemente quitarlo.
     private void destroy()
     {
         if (destroyBullet)
