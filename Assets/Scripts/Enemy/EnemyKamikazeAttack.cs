@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyMeleeAttack : MonoBehaviour
+
+//this is a version of EnemyMeleeAttack
+public class EnemyKamikazeAttack : MonoBehaviour
 {
     public float timeBetweenAttacks = 0.5f;     // The time in seconds between each attack.
     public int attackDamage = 10;               // The amount of health taken away per attack.
@@ -12,7 +14,7 @@ public class EnemyMeleeAttack : MonoBehaviour
     //EnemyHealth enemyHealth;                    // Reference to this enemy's health.
     bool playerInRange;                         // Whether player is within the trigger collider and can be attacked.
     float timer;                                // Timer for counting up to the next attack.
-    public bool wantAnimation = true;
+    public bool wantAnimation = false;
     public GameObject parent;
 
     void Awake()
@@ -25,7 +27,7 @@ public class EnemyMeleeAttack : MonoBehaviour
     }
 
 
-    
+
 
 
     void Update()
@@ -63,7 +65,7 @@ public class EnemyMeleeAttack : MonoBehaviour
             {
                 anim.SetBool("Attack", true);//Activates the attack animation
             }
-            
+
         }
     }
 
@@ -94,6 +96,8 @@ public class EnemyMeleeAttack : MonoBehaviour
         {
             // ... damage the player.
             playerHealth.TakeDamage(attackDamage);
+
+            parent.SetActive(false);
         }
     }
 

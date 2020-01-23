@@ -161,7 +161,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3720313484162056396}
   - component: {fileID: 3720313484162056397}
-  - component: {fileID: 3720313484162056434}
+  - component: {fileID: 909124162}
   m_Layer: 0
   m_Name: MeleeAttackDetector
   m_TagString: Untagged
@@ -209,7 +209,7 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 2.75, y: 4.2}
   m_EdgeRadius: 0
---- !u!114 &3720313484162056434
+--- !u!114 &909124162
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -218,13 +218,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 3720313484162056399}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0ba614ab027879d45bb94270787bf009, type: 3}
+  m_Script: {fileID: 11500000, guid: 25921109734bc84438d3da1a8d0f018e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   timeBetweenAttacks: 0.5
-  attackDamage: 5
+  attackDamage: 10
   anim: {fileID: 0}
   wantAnimation: 0
+  parent: {fileID: 3720313484808206352}
 --- !u!1 &3720313484808206352
 GameObject:
   m_ObjectHideFlags: 0

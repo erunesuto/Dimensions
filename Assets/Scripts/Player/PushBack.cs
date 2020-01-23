@@ -5,6 +5,7 @@ using UnityEngine;
 public class PushBack : MonoBehaviour
 {
     public int force = 1000;
+    private Vector2 debug;
     // Start is called before the first frame update
     void Start()
     {
@@ -14,7 +15,7 @@ public class PushBack : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -26,21 +27,19 @@ public class PushBack : MonoBehaviour
           
             // calculate force vector
             var direction = transform.position - collision.transform.position;
+            debug = direction;
             // normalize force vector to get direction only and trim magnitude
-
-            //if player is on the floor the push is bigger(dunno why need more force)
-            /*var offset = 1;
-            if (GetComponent<PlayerController>().grounded)
-            {
-                offset = 3;
-            }
-            else
-            {
-                offset = 1;
-            }*/
-
             direction.Normalize();
             gameObject.GetComponent<Rigidbody2D>().AddForce(direction * force);
+
+
+        /*if(collision.transform.position.x < transform.position.x)
+            {
+                gameObject.GetComponent<Rigidbody2D>().AddForce(Vector2.right * force);
+            }else if(collision.transform.position.x > transform.position.x)
+            {
+                gameObject.GetComponent<Rigidbody2D>().AddForce(Vector2.left * force);
+            }*/
         }
     }
 }

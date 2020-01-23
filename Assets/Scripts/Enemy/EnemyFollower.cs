@@ -7,6 +7,7 @@ public class EnemyFollower : MonoBehaviour
 
     public float speed = 10f;//movement speed
     public float distanceToPlayer = 10f;//distance enemy left between himself and the player
+    public float distanceToRetreat = 9f;
     public bool canMove = false;
 
     private Transform player;
@@ -18,7 +19,7 @@ public class EnemyFollower : MonoBehaviour
     public float distanceSpeedOffset = 15f;//a cocient to reduce/adjust the speed according the distance
 
     //variable to detects collisions with Scenario
-    public float rayLenght = 2;
+    public float rayLenght = 2f;
     private Vector2 lowerPosition;//lower position for raycasts. COntrols interactions wiht Scenerio layer
     public float lowerPositionositionY = -2;//Y position origin to lower raycast
     private Vector2 upperPosition;//upper position for raycasts. COntrols interactions wiht Scenerio layer
@@ -26,7 +27,7 @@ public class EnemyFollower : MonoBehaviour
     public bool grounded;
 
     private bool canJump = true; //flag
-    public float jumpSpeed = 10;
+    public float jumpSpeed = 20;//adjusted to "perfect" jump
 
     LayerMask scenarioLayer;
     //LayerMask playerLayer;
@@ -68,25 +69,45 @@ public class EnemyFollower : MonoBehaviour
         //absolute value. //the more far the enemy is the faster he moves
         speedAdjustedToDistance = Mathf.Abs((transform.root.position.x - player.position.x) / distanceSpeedOffset);
 
-        if (Vector2.Distance(transform.position, player.position) > distanceToPlayer && canMove == true)
+
+        //move towards player
+        /*if (Vector2.Distance(transform.position, player.position) > distanceToPlayer && canMove == true)
+        {
+
+            //   root = very most top parent              enemy position,     player position with position.y locked at enemy position.y
+            transform.root.position = Vector2.MoveTowards(transform.position, new Vector2(player.position.x, transform.position.y), speed * Time.deltaTime * speedAdjustedToDistance);
+
+        }else if(Vector2.Distance(transform.position, player.position) < distanceToRetreat && canMove == true)
+        {
+            transform.root.position = Vector2.MoveTowards(transform.position, new Vector2(player.position.x, transform.position.y), speed * Time.deltaTime *-1);
+
+        }*/
+
+        if (Mathf.Abs(transform.position.x - player.position.x) > distanceToPlayer && canMove == true)
         {
 
             //   root = very most top parent              enemy position,     player position with position.y locked at enemy position.y
             transform.root.position = Vector2.MoveTowards(transform.position, new Vector2(player.position.x, transform.position.y), speed * Time.deltaTime * speedAdjustedToDistance);
 
         }
+        else if (Mathf.Abs(transform.position.x - player.position.x) < distanceToRetreat && canMove == true)
+        {
+            transform.root.position = Vector2.MoveTowards(transform.position, new Vector2(player.position.x, transform.position.y), speed * Time.deltaTime * -1);
+
+        }
+
+
     }
 
     void flipSPrite()
     {
-
+        //normal right, flip left
         if (transform.position.x < player.position.x)
         {
             spriteRenderer.flipX = false;
 
         }
         else
-        //if (transform.position.x > target.position.x)
         {
             spriteRenderer.flipX = true;
         }
@@ -108,8 +129,9 @@ public class EnemyFollower : MonoBehaviour
         //Ray2D ray = new Ray2D(lowerPosition, Vector2.right);//lower right
 
 
-        //Debug.DrawRay(lowerPosition, Vector2.right * rayLenght);//lower right
-        //Debug.DrawRay(lowerPosition, Vector2.left * rayLenght);//lower left
+        Debug.DrawRay(lowerPosition, Vector2.right * rayLenght);//lower right
+        Debug.DrawRay(lowerPosition, Vector2.left * rayLenght);//lower left
+
 
 
         //solo se activa si el fixedTime es menos que la suma de timepos(3 segundo)
@@ -119,42 +141,58 @@ public class EnemyFollower : MonoBehaviour
         {
             canMove = true;
             
-        }else if (Physics2D.Linecast(transform.position, player.position, scenarioLayer) && Time.fixedTime > (timeVisionIsLost + timeFollowingAfterLoseVision) /*&& !visionLost*/)
+        }else if (Physics2D.Linecast(transform.position, player.position, scenarioLayer) && Time.fixedTime > (timeVisionIsLost + timeFollowingAfterLoseVision))
         {
             canMove = false;
-           
-
-            //canResetTimeVisionLost = true;// ha perdidio la vision, la proxima vez que lo vea y lo pierda de vista reinicia el timeVIsionLost
+  
         }
 
-        
-        //Debug.DrawLine(transform.position, player.position);
-        //Debug.Log("fixeTime "+Time.fixedTime + " timeVisionLost " + timeVisionIsLost +" timeFollowing " + timeFollowingAfterLoseVision + " suma "+ (timeVisionIsLost + timeFollowingAfterLoseVision) + " canResetTimeVisionLost: " + canResetTimeVisionLost);
 
+        if (grounded)
+        {
+            canJump = true;
+        }
+        else
+        {
+            canJump = false;
+
+        }
 
         //if the wall is too high enemy cannot jump.2 raycast from the top(head) of the enemy to left and right to detects high walls. Upperright and upper left
         if (Physics2D.Raycast(upperPosition, Vector2.right, rayLenght, scenarioLayer) || Physics2D.Raycast(upperPosition, Vector2.left, rayLenght, scenarioLayer))
         {
             canJump = false;
+
+            if (Mathf.Abs(transform.position.x - player.position.x) < distanceToRetreat)
+            {
+                rb2d.velocity = new Vector2(0,0);
+                Debug.Log("a");
+            }
         }
+
+        aki, meter lo de abajo en un else
+        
 
         //2raycast from the lower(feet) of the enemy to detect if theres is a obstacle and jump it
         //the !spriteRenderer.flipX manage to dont jump when moving to the right the left raycast collision with scenario behind enemy and allow him to jump again.
-        if (Physics2D.Raycast(lowerPosition, Vector2.right, rayLenght, scenarioLayer) && canJump && !spriteRenderer.flipX && grounded && canMove)//lower right
+        if (Physics2D.Raycast(lowerPosition, Vector2.right, rayLenght, scenarioLayer) && canJump /*&& !spriteRenderer.flipX */&& grounded && canMove)//lower right
         {
             rb2d.velocity = new Vector2(rb2d.velocity.x, jumpSpeed);
         }
-        else if (Physics2D.Raycast(lowerPosition, Vector2.left, rayLenght, scenarioLayer) && canJump && spriteRenderer.flipX && grounded && canMove)//lower left
+        else if (Physics2D.Raycast(lowerPosition, Vector2.left, rayLenght, scenarioLayer) && canJump /*&& spriteRenderer.flipX*/ && grounded && canMove)//lower left
         {
             rb2d.velocity = new Vector2(rb2d.velocity.x, jumpSpeed);
         }
-        canJump = true;
+
+
+        
+
     }
 
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.tag == "Player" && !Physics2D.Linecast(transform.position, player.position, scenarioLayer))
+        if (/*collision.tag == "Player"*/ collision.CompareTag("Player") && !Physics2D.Linecast(transform.position, player.position, scenarioLayer))
         {
             canMove = true;
         }
@@ -166,18 +204,18 @@ public class EnemyFollower : MonoBehaviour
         /////////////
         ///hay que pulir y limpiar algunas cosas
         
-        if (collision.tag == "Player" && !Physics2D.Linecast(transform.position, player.position, scenarioLayer))
+        if (collision.CompareTag("Player") && !Physics2D.Linecast(transform.position, player.position, scenarioLayer))
         {
             canResetTimeVisionLost = true;
         }
 
-        if (collision.tag == "Player" && canResetTimeVisionLost && Physics2D.Linecast(transform.position, player.position, scenarioLayer))
+        if (collision.CompareTag("Player") && canResetTimeVisionLost && Physics2D.Linecast(transform.position, player.position, scenarioLayer))
         {
             timeVisionIsLost = Time.fixedTime;
             canResetTimeVisionLost = false;
         }
 
-        if(collision.tag == "Player" && canResetTimeVisionLost && !Physics2D.Linecast(transform.position, player.position, scenarioLayer))
+        if(collision.CompareTag("Player") && canResetTimeVisionLost && !Physics2D.Linecast(transform.position, player.position, scenarioLayer))
         {
             canMove = true;
 
@@ -187,7 +225,7 @@ public class EnemyFollower : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if (collision.tag == "Player")
+        if (collision.CompareTag("Player"))
         {
             canMove = false;
         }
