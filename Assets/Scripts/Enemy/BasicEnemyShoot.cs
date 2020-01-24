@@ -24,6 +24,8 @@ public class BasicEnemyShoot : MonoBehaviour
         objectPooler = ObjectPooler.Instance;
 
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
+
+        timeBetweenShots *= Random.Range(0.5f, 1.5f);
     }
 
     // Update is called once per frame

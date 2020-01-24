@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyFollower : MonoBehaviour
+public class EnemyKamikazeFollower : MonoBehaviour
 {
     #region Variables
     public float speed = 10f;//movement speed
@@ -17,7 +17,6 @@ public class EnemyFollower : MonoBehaviour
     //variables to adjust the speed according the distance
     private float speedAdjustedToDistance;//the more far the enemy is the faster he moves
     public float distanceSpeedOffset = 15f;//a cocient to reduce/adjust the speed according the distance
-    public bool isKamikaze = false;
 
     //variable to detects collisions with Scenario
     public float rayLenght = 2f;
@@ -38,10 +37,10 @@ public class EnemyFollower : MonoBehaviour
     private bool canResetTimeVisionLost = false;
     #endregion
 
-
+    // Start is called before the first frame update
     void Start()
     {
-        player = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();       
+        player = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
         spriteRenderer = GetComponentInParent<SpriteRenderer>();
         rb2d = GetComponentInParent<Rigidbody2D>();
 
@@ -49,43 +48,28 @@ public class EnemyFollower : MonoBehaviour
 
         timeVisionIsLost = -2;//initialize the value to bugfix, i guess
 
-        speed *= Random.Range(0.5f, 1.5f);
     }
 
     // Update is called once per frame
     void Update()
     {
-        checkingScenarioCollisions();
-        movement();
-        flipSPrite();
-
-        Debug.Log(speedAdjustedToDistance);
+        
     }
-
 
     void movement()
     {
-        
         //absolute value. //the more far the enemy is the faster he moves
         speedAdjustedToDistance = Mathf.Abs((transform.root.position.x - player.position.x) / distanceSpeedOffset);
 
         //Enemy move towards the player
         if (Mathf.Abs(transform.position.x - player.position.x) > distanceToPlayer && canMove == true)
         {
-            aki,ajustar velocidad kamikaze
-            if (isKamikaze)//if isKamizaze speed is always the same.
-            {
-                transform.root.position = Vector2.MoveTowards(transform.position, new Vector2(player.position.x, transform.position.y), speed * Time.deltaTime + speedAdjustedToDistance);
-            }
-            else//if !isKamikaze speed is adjusted depends the distance
-            {
-                transform.root.position = Vector2.MoveTowards(transform.position, new Vector2(player.position.x, transform.position.y), speed * Time.deltaTime * speedAdjustedToDistance);
-            }
-            
+            //   root = very most top parent              enemy position,     player position with position.y locked at enemy position.y
+            transform.root.position = Vector2.MoveTowards(transform.position, new Vector2(player.position.x, transform.position.y), speed * Time.deltaTime * speedAdjustedToDistance);
         }//Enemy retreats from player
         else if (Mathf.Abs(transform.position.x - player.position.x) < distanceToRetreat && Mathf.Abs(transform.position.y - player.position.y) < distanceToRetreat && canMove == true)
-        {   
-            transform.root.position = Vector2.MoveTowards(transform.position, new Vector2(player.position.x, transform.position.y), speed * Time.deltaTime * -1); 
+        {
+            transform.root.position = Vector2.MoveTowards(transform.position, new Vector2(player.position.x, transform.position.y), speed * Time.deltaTime * -1);
         }
 
     }
@@ -103,7 +87,6 @@ public class EnemyFollower : MonoBehaviour
         }
     }
 
-   
     void checkingScenarioCollisions()
     {
         #region raycast adjustment
@@ -126,11 +109,12 @@ public class EnemyFollower : MonoBehaviour
         //solo se activa si el fixedTime es menos que la suma de timepos(3 segundo)
         //algo asi, la segundalinea a lo mejor se puede quitar?
         if (Time.fixedTime < (timeVisionIsLost + timeFollowingAfterLoseVision))
-           // && (!Physics2D.Linecast(transform.position, player.position, scenarioLayer) || Physics2D.Linecast(transform.position, player.position, scenarioLayer)))
+        // && (!Physics2D.Linecast(transform.position, player.position, scenarioLayer) || Physics2D.Linecast(transform.position, player.position, scenarioLayer)))
         {
             canMove = true;
-            
-        }else if (Physics2D.Linecast(transform.position, player.position, scenarioLayer) && Time.fixedTime > (timeVisionIsLost + timeFollowingAfterLoseVision))
+
+        }
+        else if (Physics2D.Linecast(transform.position, player.position, scenarioLayer) && Time.fixedTime > (timeVisionIsLost + timeFollowingAfterLoseVision))
         {
             canMove = false;
         }
@@ -180,7 +164,7 @@ public class EnemyFollower : MonoBehaviour
     }
 
     private void OnTriggerStay2D(Collider2D collision)
-    {       
+    {
         if (collision.CompareTag("Player") && !Physics2D.Linecast(transform.position, player.position, scenarioLayer))
         {
             canResetTimeVisionLost = true;
@@ -192,7 +176,7 @@ public class EnemyFollower : MonoBehaviour
             canResetTimeVisionLost = false;
         }
 
-        if(collision.CompareTag("Player") && canResetTimeVisionLost && !Physics2D.Linecast(transform.position, player.position, scenarioLayer))
+        if (collision.CompareTag("Player") && canResetTimeVisionLost && !Physics2D.Linecast(transform.position, player.position, scenarioLayer))
         {
             canMove = true;
 
@@ -206,20 +190,6 @@ public class EnemyFollower : MonoBehaviour
         {
             canMove = false;
         }
-    }
-
-
-    void OnDrawGizmosSelected()
-    {
-        //Gizmos.color = Color.red;
-       /* Gizmos.DrawRay(lowerPosition, Vector2.right * rayLenght);//lower right
-        Gizmos.DrawRay(lowerPosition, Vector2.left * rayLenght);//lower left
-
-        Gizmos.color = Color.red;
-        Gizmos.DrawRay(upperPosition, Vector2.right * rayLenght);//lower right
-        Gizmos.DrawRay(upperPosition, Vector2.left * rayLenght);//lower left*/
-
-
     }
 
 }

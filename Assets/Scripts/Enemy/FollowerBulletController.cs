@@ -29,11 +29,10 @@ public class FollowerBulletController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
         //transform.position = Vector2.MoveTowards(transform.position, Camera.main.ScreenToWorldPoint(player.position), moveSpeed * Time.deltaTime);//smoother
         transform.position = Vector2.MoveTowards(transform.position, player.position, moveSpeed * Time.deltaTime);
 
-        //destroy();
+        destroy();
     }
 
     void OnTriggerEnter2D(Collider2D other)
@@ -41,7 +40,7 @@ public class FollowerBulletController : MonoBehaviour
         //Dont know which is better other.gameObject.layer or other.gameObject.tag
         //if(other.gameObject.layer == 12) //12 is the enemy layer 
         // If the entering collider is a enemy...
-        if (other.gameObject.tag == "Player")
+        if (other.gameObject.CompareTag("Player"))
         {
             //Take the component of the other object a execute the TakeDamage() function
             if (other.gameObject.GetComponent<PlayerHealth>())
@@ -62,19 +61,18 @@ public class FollowerBulletController : MonoBehaviour
     }
 
 
-    //revisar para que se destruya pasado un tiempo o simplemente quitarlo.
     private void destroy()
     {
-        if (destroyBullet)
+        if (Time.fixedTime >= lifeTimeStarts + lifeTime)
         {
-            destroyBullet = false;
-            lifeTimeStarts = Time.fixedTime;
-        }
-
-        if(Time.fixedTime >= lifeTimeStarts + lifeTime)
-        {
-            destroyBullet = true;
             gameObject.SetActive(false);
         }
     }
+
+    //When gameobject.setactive(true)
+    private void OnEnable()
+    {
+        lifeTimeStarts = Time.fixedTime;
+    }
+
 }

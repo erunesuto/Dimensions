@@ -28,6 +28,8 @@ public class EnemyShoot : MonoBehaviour
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
 
         scenarioLayer = LayerMask.GetMask("Scenario");
+
+        timeBetweenShots *= Random.Range(0.5f, 1.5f);
     }
 
     // Update is called once per frame
