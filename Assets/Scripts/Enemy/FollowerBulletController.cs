@@ -10,7 +10,7 @@ public class FollowerBulletController : MonoBehaviour
     private float startTime;
     public float lifeTime = 1;
     private float lifeTimeStarts;//when the bullet spawn
-    private bool destroyBullet = true;
+    //private bool destroyBullet = true;
 
     public int attackDamage = 1;
     PlayerHealth playerHealth;

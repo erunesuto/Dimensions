@@ -17,7 +17,7 @@ public class EnemyFollower : MonoBehaviour
     //variables to adjust the speed according the distance
     private float speedAdjustedToDistance;//the more far the enemy is the faster he moves
     public float distanceSpeedOffset = 15f;//a cocient to reduce/adjust the speed according the distance
-    public bool isKamikaze = false;
+    public bool isKamikaze = false;//type of enemy
 
     //variable to detects collisions with Scenario
     public float rayLenght = 2f;
@@ -59,23 +59,49 @@ public class EnemyFollower : MonoBehaviour
         movement();
         flipSPrite();
 
-        Debug.Log(speedAdjustedToDistance);
+        Debug.Log(canJump);
     }
 
 
     void movement()
     {
+
+        aki
+        var originalValueDistanceToPlayer = distanceToPlayer;
+
+        if (Physics2D.Raycast(lowerPosition, Vector2.left, rayLenght, scenarioLayer) && player.transform.position.x < transform.position.x)
+        {
+             
+            distanceToPlayer -= 2;
+        }
+       
+        if(!Physics2D.Raycast(lowerPosition, Vector2.left, rayLenght, scenarioLayer))
+        {
+            distanceToPlayer = originalValueDistanceToPlayer;
+        }
+        //performance is not the best,maybe should go in other place
+        //fix. Allow enemy retrats from player when enemy is touching a wall.
         
+        /*if ((Physics2D.Raycast(upperPosition, Vector2.right, rayLenght, scenarioLayer) && player.transform.position.x > transform.position.x && !Physics2D.Linecast(transform.position, player.position, scenarioLayer))
+            || (Physics2D.Raycast(upperPosition, Vector2.left, rayLenght, scenarioLayer) && player.transform.position.x < transform.position.x && !Physics2D.Linecast(transform.position, player.position, scenarioLayer)))
+*/
+        if(!Physics2D.Linecast(transform.position, player.position, scenarioLayer) 
+           && (Physics2D.Raycast(upperPosition, Vector2.right, rayLenght, scenarioLayer) && player.transform.position.x > transform.position.x
+           || Physics2D.Raycast(upperPosition, Vector2.left, rayLenght, scenarioLayer) && player.transform.position.x < transform.position.x))
+        {
+            canMove = true;
+        }
+
         //absolute value. //the more far the enemy is the faster he moves
         speedAdjustedToDistance = Mathf.Abs((transform.root.position.x - player.position.x) / distanceSpeedOffset);
 
         //Enemy move towards the player
         if (Mathf.Abs(transform.position.x - player.position.x) > distanceToPlayer && canMove == true)
         {
-            aki,ajustar velocidad kamikaze
+            
             if (isKamikaze)//if isKamizaze speed is always the same.
             {
-                transform.root.position = Vector2.MoveTowards(transform.position, new Vector2(player.position.x, transform.position.y), speed * Time.deltaTime + speedAdjustedToDistance);
+                transform.root.position = Vector2.MoveTowards(transform.position, new Vector2(player.position.x, transform.position.y), speed * Time.deltaTime + speedAdjustedToDistance );
             }
             else//if !isKamikaze speed is adjusted depends the distance
             {
@@ -119,12 +145,11 @@ public class EnemyFollower : MonoBehaviour
         //Ray2D ray = new Ray2D(lowerPosition, Vector2.right);//lower right
 
 
-        //Debug.DrawRay(lowerPosition, Vector2.right * rayLenght);//lower right
-        //Debug.DrawRay(lowerPosition, Vector2.left * rayLenght);//lower left
+        Debug.DrawRay(lowerPosition, Vector2.right * rayLenght);//lower right
+        Debug.DrawRay(lowerPosition, Vector2.left * rayLenght);//lower left
         #endregion
 
         //solo se activa si el fixedTime es menos que la suma de timepos(3 segundo)
-        //algo asi, la segundalinea a lo mejor se puede quitar?
         if (Time.fixedTime < (timeVisionIsLost + timeFollowingAfterLoseVision))
            // && (!Physics2D.Linecast(transform.position, player.position, scenarioLayer) || Physics2D.Linecast(transform.position, player.position, scenarioLayer)))
         {
@@ -135,7 +160,7 @@ public class EnemyFollower : MonoBehaviour
             canMove = false;
         }
 
-
+        
         if (grounded)
         {
             canJump = true;
@@ -157,7 +182,6 @@ public class EnemyFollower : MonoBehaviour
             }
         }
 
-
         //2raycast from the lower(feet) of the enemy to detect if theres is a obstacle and jump it
         //the !spriteRenderer.flipX manage to dont jump when moving to the right the left raycast collision with scenario behind enemy and allow him to jump again.
         if (Physics2D.Raycast(lowerPosition, Vector2.right, rayLenght, scenarioLayer) && canJump && grounded && canMove)//lower right
@@ -173,7 +197,7 @@ public class EnemyFollower : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (/*collision.tag == "Player"*/ collision.CompareTag("Player") && !Physics2D.Linecast(transform.position, player.position, scenarioLayer))
+        if (collision.CompareTag("Player") && !Physics2D.Linecast(transform.position, player.position, scenarioLayer))
         {
             canMove = true;
         }
@@ -186,6 +210,7 @@ public class EnemyFollower : MonoBehaviour
             canResetTimeVisionLost = true;
         }
 
+        //when enemy loses vision of the player timeVisionIsLost gets its value
         if (collision.CompareTag("Player") && canResetTimeVisionLost && Physics2D.Linecast(transform.position, player.position, scenarioLayer))
         {
             timeVisionIsLost = Time.fixedTime;
@@ -208,7 +233,27 @@ public class EnemyFollower : MonoBehaviour
         }
     }
 
+    //increse the speed of the enemy OnCollisionEnter2D with player.
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        var originalValueSpeed = speed;
+        if (collision.collider.CompareTag("Player"))
+        {
+            speed *= 3;
+        }
+    }
 
+    //decrease the speed of the enemy OnCollisionEnter2D with player.
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        var originalValueSpeed = speed;
+        if (collision.collider.CompareTag("Player"))
+        {
+            
+            speed /= 3;
+        }
+    }
+    
     void OnDrawGizmosSelected()
     {
         //Gizmos.color = Color.red;
